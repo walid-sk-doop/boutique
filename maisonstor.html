@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boutique Vêtements - Premium Fashion</title>
+  <style>
+    /* RESET & STYLES GÉNÉRAUX */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f4f6f8;
+      color: #333;
+      padding-bottom: 50px;
+    }
+
+    /* NAVIGATION & HEADER */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 5%;
+      background-color: #111111;
+      color: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #e67e22;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav a {
+      color: #ddd;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+
+    .nav a:hover, .nav a.active {
+      color: #e67e22;
+    }
+
+    /* SECTIONS (PAGES MULTIPLES) */
+    .page-section {
+      display: none;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .page-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ACCUEIL (HERO) */
+    .hero {
+      text-align: center;
+      padding: 90px 20px;
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                  url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&auto=format&fit=crop') center/cover no-repeat;
+      color: #ffffff;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 25px;
+      color: #ccc;
+    }
+
+    .btn-hero {
+      padding: 12px 30px;
+      background-color: #e67e22;
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-hero:hover {
+      background-color: #d35400;
+    }
+
+    /* BOUTIQUE / CATALOGUE */
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 35px;
+      font-size: 28px;
+      color: #2c3e50;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      width: 60px;
+      height: 3px;
+      background-color: #e67e22;
+      display: block;
+      margin: 8px auto 0;
+      border-radius: 2px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 30px;
+    }
+
+    .product-card {
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .image-container {
+      width: 100%;
+      height: 300px;
+      background-color: #eef2f5;
+      overflow: hidden;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .product-info {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .product-info h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: #2c3e50;
+    }
+
+    .price {
+      font-size: 20px;
+      font-weight: bold;
+      color: #e67e22;
+      margin-bottom: 15px;
+    }
+
+    .qty-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .qty-box input {
+      width: 60px;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .btn-buy {
+      margin-top: auto;
+      padding: 12px;
+      background-color: #111111;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-buy:hover {
+      background-color: #e67e22;
+    }
+
+    /* LOGIN ADMIN & ESPACE ADMIN */
+    .login-box {
+      max-width: 400px;
+      margin: 50px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .login-box h3 {
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .admin-card {
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .admin-card h3 {
+      margin-bottom: 20px;
+      font-size: 20px;
+      color: #2c3e50;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .btn-admin {
+      width: 100%;
+      padding: 12px;
+      background-color: #27ae60;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .btn-admin:hover {
+      background-color: #219150;
+    }
+
+    .btn-logout {
+      background-color: #7f8c8d;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-logout:hover {
+      background-color: #626d6e;
+    }
+
+    .btn-delete {
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-delete:hover {
+      background-color: #c0392b;
+    }
+
+    .admin-img-thumb {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    /* TABLEAUX ADMIN */
+    .orders-table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    table th, table td {
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    table th {
+      background-color: #f8fafc;
+      color: #475569;
+    }
+
+    /* CONTACT */
+    .contact-box {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    /* MODALE DE COMMANDE */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 450px;
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 22px;
+      cursor: pointer;
+      color: #777;
+    }
+
+    .order-summary {
+      background-color: #f8fafc;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      line-height: 1.6;
+      border-left: 4px solid #e67e22;
+    }
+
+    .empty-msg {
+      text-align: center;
+      padding: 40px;
+      color: #7f8c8d;
+      font-size: 16px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: #111;
+      color: #aaa;
+      margin-top: 60px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <header class="header">
+    <div class="logo">MaisonStyle</div>
+    <nav class="nav">
+      <a onclick="showPage('home')" id="nav-home" class="active">Accueil</a>
+      <a onclick="showPage('shop')" id="nav-shop">Boutique</a>
+      <a onclick="showPage('admin')" id="nav-admin">Espace Admin 🔒</a>
+      <a onclick="showPage('contact')" id="nav-contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- ACCUEIL -->
+  <section id="page-home" class="page-section active">
+    <div class="hero">
+      <h1>Nouvelle Collection 2026</h1>
+      <p>Découvrez nos derniers modèles exclusifs avec livraison à domicile.</p>
+      <button class="btn-hero" onclick="showPage('shop')">Voir le catalogue</button>
+    </div>
+  </section>
+
+  <!-- BOUTIQUE -->
+  <section id="page-shop" class="page-section">
+    <main class="container">
+      <h2 class="section-title">Nos Modèles Nouveautés</h2>
+      <div class="product-grid" id="productGrid">
+        <!-- Produits générés dynamiquement -->
+      </div>
+    </main>
+  </section>
+
+  <!-- ESPACE ADMIN -->
+  <section id="page-admin" class="page-section">
+    <main class="container">
+
+      <!-- LOGIN ADMIN -->
+      <div id="adminLoginBox" class="login-box">
+        <h3>🔒 Connexion Administration</h3>
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="adminPass">Mot de passe :</label>
+            <input type="password" id="adminPass" placeholder="Entrez votre mot de passe" required>
+          </div>
+          <button type="submit" class="btn-admin" style="background-color: #2c3e50;">Se connecter</button>
+        </form>
+      </div>
+
+      <!-- TABLEAU DE BORD ADMIN -->
+      <div id="adminDashboard" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+          <h2 class="section-title" style="margin-bottom: 0;">Panneau d'Administration</h2>
+          <button class="btn-logout" onclick="logoutAdmin()">Déconnexion 🚪</button>
+        </div>
+        
+        <div class="admin-grid">
+          <!-- AJOUT ARTICLE -->
+          <div class="admin-card">
+            <h3>➕ Ajouter un Nouveau Modèle</h3>
+            <form id="addProductForm" onsubmit="addNewProduct(event)">
+              <div class="form-group">
+                <label for="prod-title">Nom de l'article :</label>
+                <input type="text" id="prod-title" placeholder="Ex: Veste en Cuir Noir" required>
+              </div>
+
+              <div class="form-group">
+                <label for="prod-price">Prix (DH / MAD) :</label>
+                <input type="number" id="prod-price" placeholder="Ex: 350" required>
+              </div>
+
+              <div class="form-group">
+                <label for="prod-img">Image depuis votre PC :</label>
+                <input type="file" id="prod-img" accept="image/*" required>
+              </div>
+
+              <button type="submit" class="btn-admin">Ajouter au site</button>
+            </form>
+          </div>
+
+          <!-- COMMANDES REÇUES -->
+          <div class="admin-card">
+            <h3>📦 Commandes Reçues (<span id="orderCount">0</span>)</h3>
+            <div class="orders-table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Client</th>
+                    <th>Téléphone</th>
+                    <th>Article</th>
+                    <th>Qté</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                  <!-- Commandes -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- GESTION ARTICLES -->
+        <div class="admin-card">
+          <h3>🗑️ Gérer / Supprimer des Articles en ligne (<span id="adminProductCount">0</span>)</h3>
+          <div class="orders-table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Nom de l'article</th>
+                  <th>Prix</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminProductsTableBody">
+                <!-- Produits admin -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="page-contact" class="page-section">
+    <main class="container">
+      <h2 class="section-title">Contactez-nous</h2>
+      <div class="contact-box">
+        <div class="form-group">
+          <label>Votre Nom :</label>
+          <input type="text" placeholder="Entrez votre nom">
+        </div>
+        <div class="form-group">
+          <label>Email / Téléphone :</label>
+          <input type="text" placeholder="Entrez votre contact">
+        </div>
+        <div class="form-group">
+          <label>Message :</label>
+          <textarea rows="4" placeholder="Votre message..."></textarea>
+        </div>
+        <button class="btn-admin" onclick="alert('Message envoyé !')">Envoyer</button>
+      </div>
+    </main>
+  </section>
+
+  <!-- MODALE CLIENT -->
+  <div id="orderModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2>Commander cet article</h2>
+      
+      <div class="order-summary">
+        <p><strong>Article :</strong> <span id="modalProdTitle"></span></p>
+        <p><strong>Quantité :</strong> <span id="modalProdQty"></span></p>
+        <p><strong>Total estimé :</strong> <span id="modalProdTotal"></span> MAD</p>
+      </div>
+
+      <form onsubmit="confirmOrder(event)">
+        <div class="form-group">
+          <label for="client-name">Nom complet :</label>
+          <input type="text" id="client-name" placeholder="Ex: Ahmed Bennani" required>
+        </div>
+
+        <div class="form-group">
+          <label for="client-phone">Téléphone :</label>
+          <input type="tel" id="client-phone" placeholder="Ex: 0612345678" required>
+        </div>
+
+        <div class="form-group">
+          <label for="client-address">Adresse de livraison :</label>
+          <textarea id="client-address" rows="2" placeholder="Ville, quartier, rue..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-admin" style="background-color: #e67e22;">Valider la commande</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 MaisonStyle - Tous droits réservés.</p>
+  </footer>
+
+  <script>
+    // MOT DE PASSE ADMIN
+    const ADMIN_PASSWORD = "admin123";
+
+    // CHARGER DEPUIS LOCALSTORAGE (OU VIDE SI RIEN N'EXISTE)
+    let products = JSON.parse(localStorage.getItem('my_boutique_products')) || [];
+    let orders = JSON.parse(localStorage.getItem('my_boutique_orders')) || [];
+
+    let selectedProduct = null;
+
+    // SAUVEGARDER DANS LOCALSTORAGE
+    function saveToStorage() {
+      localStorage.setItem('my_boutique_products', JSON.stringify(products));
+      localStorage.setItem('my_boutique_orders', JSON.stringify(orders));
+    }
+
+    // AUTHENTIFICATION
+    function handleLogin(e) {
+      e.preventDefault();
+      const enteredPass = document.getElementById('adminPass').value;
+
+      if (enteredPass === ADMIN_PASSWORD) {
+        document.getElementById('adminLoginBox').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
+        document.getElementById('adminPass').value = '';
+      } else {
+        alert('Mot de passe incorrect !');
+      }
+    }
+
+    function logoutAdmin() {
+      document.getElementById('adminDashboard').style.display = 'none';
+      document.getElementById('adminLoginBox').style.display = 'block';
+    }
+
+    // NAVIGATION
+    function showPage(pageId) {
+      document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.querySelectorAll('.nav a').forEach(link => {
+        link.classList.remove('active');
+      });
+
+      document.getElementById('page-' + pageId).classList.add('active');
+      document.getElementById('nav-' + pageId).classList.add('active');
+    }
+
+    // AFFICHER PRODUITS
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      const adminTbody = document.getElementById('adminProductsTableBody');
+      const adminCount = document.getElementById('adminProductCount');
+
+      grid.innerHTML = '';
+      adminTbody.innerHTML = '';
+      adminCount.innerText = products.length;
+
+      if (products.length === 0) {
+        grid.innerHTML = '<div class="empty-msg">Aucun article en ligne pour le moment. Ajoutez des articles depuis l\'Espace Admin !</div>';
+        adminTbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Aucun article dans le catalogue.</td></tr>';
+        return;
+      }
+
+      products.forEach(p => {
+        // Boutique
+        grid.innerHTML += `
+          <div class="product-card">
+            <div class="image-container">
+              <img src="${p.image}" alt="${p.title}" class="product-img">
+            </div>
+            <div class="product-info">
+              <h3>${p.title}</h3>
+              <div class="price">${p.price} MAD</div>
+              <div class="qty-box">
+                <label>Quantité :</label>
+                <input type="number" id="qty-${p.id}" value="1" min="1" max="50">
+              </div>
+              <button class="btn-buy" onclick="openModal(${p.id})">Acheter maintenant</button>
+            </div>
+          </div>
+        `;
+
+        // Tableau Admin
+        adminTbody.innerHTML += `
+          <tr>
+            <td><img src="${p.image}" class="admin-img-thumb" alt="thumb"></td>
+            <td><strong>${p.title}</strong></td>
+            <td>${p.price} MAD</td>
+            <td>
+              <button class="btn-delete" onclick="deleteProduct(${p.id})">Supprimer 🗑️</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // SUPPRIMER ARTICLE
+    function deleteProduct(productId) {
+      if (confirm('Voulez-vous vraiment supprimer cet article du site ?')) {
+        products = products.filter(p => p.id !== productId);
+        saveToStorage();
+        renderProducts();
+      }
+    }
+
+    // AJOUTER ARTICLE
+    function addNewProduct(e) {
+      e.preventDefault();
+
+      const title = document.getElementById('prod-title').value;
+      const price = parseFloat(document.getElementById('prod-price').value);
+      const imgInput = document.getElementById('prod-img');
+
+      if (imgInput.files && imgInput.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          const newProd = {
+            id: Date.now(),
+            title: title,
+            price: price,
+            image: e.target.result
+          };
+
+          products.unshift(newProd);
+          saveToStorage();
+          renderProducts();
+          
+          document.getElementById('addProductForm').reset();
+          alert('Article ajouté avec succès !');
+          showPage('shop');
+        };
+
+        reader.readAsDataURL(imgInput.files[0]);
+      }
+    }
+
+    // MODALE COMMANDE
+    function openModal(productId) {
+      const prod = products.find(p => p.id === productId);
+      const qtyInput = document.getElementById(`qty-${productId}`);
+      const quantity = parseInt(qtyInput.value) || 1;
+
+      selectedProduct = {
+        title: prod.title,
+        price: prod.price,
+        quantity: quantity,
+        total: prod.price * quantity
+      };
+
+      document.getElementById('modalProdTitle').innerText = selectedProduct.title;
+      document.getElementById('modalProdQty').innerText = selectedProduct.quantity;
+      document.getElementById('modalProdTotal').innerText = selectedProduct.total;
+
+      document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('orderModal').style.display = 'none';
+    }
+
+    // VALIDER COMMANDE
+    function confirmOrder(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('client-name').value;
+      const phone = document.getElementById('client-phone').value;
+
+      const order = {
+        name: name,
+        phone: phone,
+        article: selectedProduct.title,
+        qty: selectedProduct.quantity,
+        total: selectedProduct.total
+      };
+
+      orders.unshift(order);
+      saveToStorage();
+      updateOrdersTable();
+
+      alert(`Commande validée pour ${name} ! Total: ${selectedProduct.total} MAD`);
+      
+      closeModal();
+      document.querySelector('#orderModal form').reset();
+    }
+
+    // MAJ COMMANDES
+    function updateOrdersTable() {
+      const tbody = document.getElementById('ordersTableBody');
+      document.getElementById('orderCount').innerText = orders.length;
+
+      tbody.innerHTML = '';
+      if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Aucune commande pour le moment.</td></tr>';
+        return;
+      }
+
+      orders.forEach(o => {
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${o.name}</strong></td>
+            <td>${o.phone}</td>
+            <td>${o.article}</td>
+            <td>${o.qty}</td>
+            <td><strong>${o.total} MAD</strong></td>
+          </tr>
+        `;
+      });
+    }
+
+    // INITIALISATION
+    window.onload = function() {
+      renderProducts();
+      updateOrdersTable();
+    };
+
+    window.onclick = function(e) {
+      const modal = document.getElementById('orderModal');
+      if (e.target === modal) {
+        closeModal();
+      }
+    };
+  </script>
+</body>
+</html>
